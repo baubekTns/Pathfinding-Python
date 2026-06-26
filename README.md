@@ -116,4 +116,3 @@ python main.py
 - Custom start and end node selection
 - Adjustable visualization speed
 - Multiple heuristic options
-- UI controls for maze generation and algorithm settings
