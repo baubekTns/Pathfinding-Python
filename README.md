@@ -1,19 +1,102 @@
-# Pathfinding-Python
+# A\* Pathfinding Visualizer
 
-This project visualizes the A\* pathfinding algorithm in a grid with randomly generated obstacles. The start and end points are also randomly placed, and the algorithm searches for the shortest path from the start to the end, considering 8 possible movement directions (including diagonals).
+A Python application that visualizes the **A\* (A-Star) pathfinding algorithm** on a randomly generated grid. The program animates the search process, showing how the algorithm explores the grid before highlighting the shortest path between the start and end nodes.
 
 ## Features
 
-- **Random Maze Generation**: The maze is generated with obstacles, and both the start and end positions are randomly placed.
-- **A\* Pathfinding Algorithm**: Implements the A\* algorithm to find the shortest path from the start to the end, considering diagonal movement.
+- Random maze generation with configurable obstacle density
+- Randomly generated start and end positions
+- A\* pathfinding algorithm with diagonal movement support
+- Animated visualization of the search process
+- Displays open and closed node sets during execution
+- Highlights the final shortest path
+- Prints search statistics including:
+  - Runtime
+  - Nodes explored
+  - Path length
 
-## Requirements
+## Technologies
 
-- Python 3.x
-- Pygame library
+- Python 3
+- Pygame
 
-To install Pygame, run:
+## Project Structure
+
+```
+.
+├── pathfinding.py
+├── requirements.txt
+└── README.md
+```
+
+## Installation
+
+### 1. Clone the repository
 
 ```bash
-pip install pygame
+git clone https://github.com/<your-username>/Pathfinding-Python.git
+cd Pathfinding-Python
 ```
+
+### 2. Create a virtual environment
+
+**macOS / Linux**
+
+```bash
+python3 -m venv .venv
+```
+
+**Windows**
+
+```bash
+python -m venv .venv
+```
+
+### 3. Activate the virtual environment
+
+**macOS / Linux**
+
+```bash
+source .venv/bin/activate
+```
+
+**Windows (Command Prompt)**
+
+```cmd
+.venv\Scripts\activate
+```
+
+**Windows (PowerShell)**
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+### 4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+## Running the Project
+
+```bash
+python pathfinding.py
+```
+
+## Controls
+
+| Key       | Action                                 |
+| --------- | -------------------------------------- |
+| **Space** | Generate a new random maze and run A\* |
+| **R**     | Generate a new random maze             |
+| **Esc**   | Exit the application                   |
+
+## Future Improvements
+
+- Interactive wall placement with the mouse
+- Custom start and end node selection
+- Adjustable visualization speed
+- Additional algorithms (Dijkstra, BFS, DFS, Greedy Best-First Search)
+- Multiple heuristic options
+- UI controls for maze generation and algorithm settings
