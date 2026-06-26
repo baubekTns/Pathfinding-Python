@@ -16,6 +16,7 @@ import pygame
 
 from src.algorithms.astar import AStar
 from src.algorithms.bfs import BreadthFirstSearch
+from src.algorithms.dfs import DepthFirstSearch
 from src.algorithms.dijkstra import Dijkstra
 from src.algorithms.greedy import GreedyBestFirstSearch
 from src.constants import (
@@ -62,6 +63,7 @@ class Visualizer:
             pygame.K_2: BreadthFirstSearch,
             pygame.K_3: Dijkstra,
             pygame.K_4: GreedyBestFirstSearch,
+            pygame.K_5: DepthFirstSearch,
         }
 
         self.selected_algorithm = AStar
@@ -200,6 +202,7 @@ class Visualizer:
         print("2      - Select Breadth-First Search")
         print("3      - Select Dijkstra")
         print("4      - Select Greedy Best-First Search")
+        print("5      - Select Depth-First Search")
         print("SPACE  - Pause / Resume")
         print("R      - Generate new maze")
         print("ENTER  - Restart current maze")

@@ -92,6 +92,7 @@ python main.py
 | **2**     | select BFS                      |
 | **3**     | select Dijkstra                 |
 | **4**     | select Greedy Best-First Search |
+| **5**     | select DFS                      |
 | **Space** | pauses/resumes                  |
 | **R**     | Generate a new random maze      |
 | **Esc**   | Exit the application            |
