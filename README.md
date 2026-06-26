@@ -4,7 +4,7 @@ A Python application that visualizes and compares multiple pathfinding algorithm
 
 ## Features
 
-- Random maze generation with configurable obstacle density
+- Procedural DFS maze generation with loops, dead-end reduction, and configurable layout settings
 - Randomly generated start and end positions
 - Multiple pathfinding algorithms:
   - A\* Search

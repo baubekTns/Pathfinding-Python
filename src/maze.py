@@ -11,22 +11,60 @@ from src.constants import (
     COLS,
     ALLOW_DIAGONALS,
     OBSTACLE_DENSITY,
+    MAZE_GENERATOR,
+    DFS_LOOP_ATTEMPTS,
+    DFS_DEAD_END_PASSES,
+    DFS_WIDEN_PASSES,
+    DFS_CENTRAL_CROSS,
 )
+from src.maze_generators.dfs_maze import generate_dfs_maze
 
 
 def generate_maze(
-    rows: int = ROWS,
-    cols: int = COLS,
-    density: float = OBSTACLE_DENSITY,
+    rows=ROWS,
+    cols=COLS,
+    density=OBSTACLE_DENSITY,
+    generator_type=MAZE_GENERATOR,
 ):
     """
-    Generate a random maze.
+    Generate a maze and choose start/end positions.
 
     0 = walkable
-    1 = obstacle
+    1 = wall
     """
 
-    maze = [
+    if generator_type == "dfs":
+        maze = generate_dfs_maze(
+            rows,
+            cols,
+            loop_attempts=DFS_LOOP_ATTEMPTS,
+            dead_end_passes=DFS_DEAD_END_PASSES,
+            widen_passes=DFS_WIDEN_PASSES,
+            central_cross=DFS_CENTRAL_CROSS,
+        )
+    else:
+        maze = generate_random_obstacle_grid(
+            rows,
+            cols,
+            density,
+        )
+
+    start, end = choose_start_and_end(maze)
+
+    maze[start[0]][start[1]] = 0
+    maze[end[0]][end[1]] = 0
+
+    return maze, start, end
+
+
+def generate_random_obstacle_grid(rows, cols, density):
+    """
+    Generate the original random obstacle grid.
+
+    This is kept as a fallback generator.
+    """
+
+    return [
         [
             1 if random.random() < density else 0
             for _ in range(cols)
@@ -34,32 +72,48 @@ def generate_maze(
         for _ in range(rows)
     ]
 
-    start = random_empty_cell(maze)
-    end = random_empty_cell(maze)
 
-    while end == start:
-        end = random_empty_cell(maze)
-
-    return maze, start, end
-
-
-def random_empty_cell(maze):
+def choose_start_and_end(maze):
     """
-    Return a random walkable position.
+    Pick two walkable cells that are reasonably far apart.
     """
 
-    rows = len(maze)
-    cols = len(maze[0])
+    walkable_cells = get_walkable_cells(maze)
 
-    while True:
+    if len(walkable_cells) < 2:
+        raise ValueError("Maze does not contain enough walkable cells.")
 
-        position = (
-            random.randint(0, rows - 1),
-            random.randint(0, cols - 1),
-        )
+    start = random.choice(walkable_cells)
 
-        if maze[position[0]][position[1]] == 0:
-            return position
+    end = max(
+        walkable_cells,
+        key=lambda cell: manhattan_distance(start, cell),
+    )
+
+    return start, end
+
+
+def get_walkable_cells(maze):
+    """
+    Return all walkable cells in the maze.
+    """
+
+    cells = []
+
+    for row in range(len(maze)):
+        for col in range(len(maze[0])):
+            if maze[row][col] == 0:
+                cells.append((row, col))
+
+    return cells
+
+
+def manhattan_distance(a, b):
+    """
+    Manhattan distance between two cells.
+    """
+
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 
 def in_bounds(position, maze):
@@ -78,7 +132,7 @@ def in_bounds(position, maze):
 
 def is_walkable(position, maze):
     """
-    Return True if the position is not an obstacle.
+    Return True if the position is not a wall.
     """
 
     row, col = position
@@ -101,7 +155,6 @@ def get_neighbors(position, maze):
     ]
 
     if ALLOW_DIAGONALS:
-
         directions.extend([
             (-1, -1),
             (-1, 1),
@@ -112,7 +165,6 @@ def get_neighbors(position, maze):
     neighbours = []
 
     for dr, dc in directions:
-
         neighbour = (
             row + dr,
             col + dc,

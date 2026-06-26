@@ -7,8 +7,8 @@ Changing values here affects the whole application.
 # Grid
 # =========================
 
-ROWS = 20
-COLS = 20
+ROWS = 21
+COLS = 21
 CELL_SIZE = 30
 
 GRID_WIDTH = COLS * CELL_SIZE
@@ -25,7 +25,10 @@ WINDOW_HEIGHT = GRID_HEIGHT
 
 FPS = 60
 SEARCH_DELAY = 25
-ALLOW_DIAGONALS = True
+
+# For proper maze behaviour, keep this False.
+# Diagonal movement can cut through maze corners.
+ALLOW_DIAGONALS = False
 
 SHOW_HUD = True
 
@@ -33,7 +36,14 @@ SHOW_HUD = True
 # Maze
 # =========================
 
+MAZE_GENERATOR = "dfs"
+
 OBSTACLE_DENSITY = 0.30
+
+DFS_LOOP_ATTEMPTS = 28
+DFS_DEAD_END_PASSES = 2
+DFS_WIDEN_PASSES = 1
+DFS_CENTRAL_CROSS = True
 
 # =========================
 # Colours
