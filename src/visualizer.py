@@ -16,6 +16,8 @@ import pygame
 
 from src.algorithms.astar import AStar
 from src.algorithms.bfs import BreadthFirstSearch
+from src.algorithms.dijkstra import Dijkstra
+from src.algorithms.greedy import GreedyBestFirstSearch
 from src.constants import (
     FPS,
     SEARCH_DELAY,
@@ -58,6 +60,8 @@ class Visualizer:
         self.algorithms = {
             pygame.K_1: AStar,
             pygame.K_2: BreadthFirstSearch,
+            pygame.K_3: Dijkstra,
+            pygame.K_4: GreedyBestFirstSearch,
         }
 
         self.selected_algorithm = AStar
@@ -194,6 +198,8 @@ class Visualizer:
         print("--------------------------------------")
         print("1      - Select A*")
         print("2      - Select Breadth-First Search")
+        print("3      - Select Dijkstra")
+        print("4      - Select Greedy Best-First Search")
         print("SPACE  - Pause / Resume")
         print("R      - Generate new maze")
         print("ENTER  - Restart current maze")
@@ -211,6 +217,10 @@ class Visualizer:
         print(f"End            : {self.end}")
         print(f"Nodes explored : {self.algorithm.nodes_explored}")
         print(f"Path length    : {self.algorithm.path_length}")
+
+        if hasattr(self.algorithm, "path_cost"):
+            print(f"Path cost      : {self.algorithm.path_cost:.3f}")
+
         print(f"Runtime        : {self.algorithm.runtime_ms:.2f} ms")
 
         if self.algorithm.has_path:

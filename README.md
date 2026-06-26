@@ -86,13 +86,15 @@ python main.py
 
 ## Controls
 
-| Key       | Action                     |
-| --------- | -------------------------- |
-| **1**     | select A\*                 |
-| **2**     | select BFS                 |
-| **Space** | pauses/resumes             |
-| **R**     | Generate a new random maze |
-| **Esc**   | Exit the application       |
+| Key       | Action                          |
+| --------- | ------------------------------- |
+| **1**     | select A\*                      |
+| **2**     | select BFS                      |
+| **3**     | select Dijkstra                 |
+| **4**     | select Greedy Best-First Search |
+| **Space** | pauses/resumes                  |
+| **R**     | Generate a new random maze      |
+| **Esc**   | Exit the application            |
 
 ## Future Improvements
 
