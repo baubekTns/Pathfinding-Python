@@ -81,22 +81,23 @@ pip install -r requirements.txt
 ## Running the Project
 
 ```bash
-python pathfinding.py
+python main.py
 ```
 
 ## Controls
 
-| Key       | Action                                 |
-| --------- | -------------------------------------- |
-| **Space** | Generate a new random maze and run A\* |
-| **R**     | Generate a new random maze             |
-| **Esc**   | Exit the application                   |
+| Key       | Action                     |
+| --------- | -------------------------- |
+| **1**     | select A\*                 |
+| **2**     | select BFS                 |
+| **Space** | pauses/resumes             |
+| **R**     | Generate a new random maze |
+| **Esc**   | Exit the application       |
 
 ## Future Improvements
 
 - Interactive wall placement with the mouse
 - Custom start and end node selection
 - Adjustable visualization speed
-- Additional algorithms (Dijkstra, BFS, DFS, Greedy Best-First Search)
 - Multiple heuristic options
 - UI controls for maze generation and algorithm settings

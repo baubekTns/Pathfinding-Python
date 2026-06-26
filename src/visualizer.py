@@ -4,6 +4,7 @@ Main visualizer controller.
 This module handles:
 - Pygame event loop
 - Maze generation
+- Algorithm selection
 - Algorithm execution
 - Keyboard controls
 - Passing algorithm state to the renderer
@@ -14,6 +15,7 @@ from __future__ import annotations
 import pygame
 
 from src.algorithms.astar import AStar
+from src.algorithms.bfs import BreadthFirstSearch
 from src.constants import (
     FPS,
     SEARCH_DELAY,
@@ -53,23 +55,53 @@ class Visualizer:
 
         self.last_step_time = 0
 
+        self.algorithms = {
+            pygame.K_1: AStar,
+            pygame.K_2: BreadthFirstSearch,
+        }
+
+        self.selected_algorithm = AStar
+
         self.reset()
 
     def reset(self):
         """
-        Generate a new maze and reset the algorithm.
+        Generate a new maze and reset the selected algorithm.
         """
 
         self.maze, self.start, self.end = generate_maze()
+        self.create_algorithm()
 
-        self.algorithm = AStar(
+        self.paused = False
+        self.last_step_time = pygame.time.get_ticks()
+
+    def restart_same_maze(self):
+        """
+        Restart the selected algorithm on the current maze.
+        """
+
+        self.create_algorithm()
+        self.paused = False
+        self.last_step_time = pygame.time.get_ticks()
+
+    def create_algorithm(self):
+        """
+        Create a fresh instance of the selected algorithm.
+        """
+
+        self.algorithm = self.selected_algorithm(
             self.maze,
             self.start,
             self.end
         )
 
-        self.paused = False
-        self.last_step_time = pygame.time.get_ticks()
+    def select_algorithm(self, algorithm_class):
+        """
+        Change the active algorithm and restart on the same maze.
+        """
+
+        self.selected_algorithm = algorithm_class
+        self.restart_same_maze()
 
     def run(self):
         """
@@ -115,7 +147,10 @@ class Visualizer:
             self.paused = not self.paused
 
         elif key == pygame.K_RETURN:
-            self.reset()
+            self.restart_same_maze()
+
+        elif key in self.algorithms:
+            self.select_algorithm(self.algorithms[key])
 
     def update(self):
         """
@@ -157,9 +192,11 @@ class Visualizer:
         print("======================================")
         print("Controls")
         print("--------------------------------------")
+        print("1      - Select A*")
+        print("2      - Select Breadth-First Search")
         print("SPACE  - Pause / Resume")
         print("R      - Generate new maze")
-        print("ENTER  - Restart with new maze")
+        print("ENTER  - Restart current maze")
         print("ESC    - Quit")
         print("======================================\n")
 
