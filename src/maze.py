@@ -1,76 +1,143 @@
-from constants import *
+"""
+Maze generation and utility functions.
+"""
+
+from __future__ import annotations
+
 import random
 
-# MAZE GENERATION
+from src.constants import (
+    ROWS,
+    COLS,
+    ALLOW_DIAGONALS,
+    OBSTACLE_DENSITY,
+)
 
-def generate_maze(rows, cols, density=0.30):
 
-    maze = []
+def generate_maze(
+    rows: int = ROWS,
+    cols: int = COLS,
+    density: float = OBSTACLE_DENSITY,
+):
+    """
+    Generate a random maze.
 
-    for r in range(rows):
+    0 = walkable
+    1 = obstacle
+    """
 
-        row = []
+    maze = [
+        [
+            1 if random.random() < density else 0
+            for _ in range(cols)
+        ]
+        for _ in range(rows)
+    ]
 
-        for c in range(cols):
+    start = random_empty_cell(maze)
+    end = random_empty_cell(maze)
 
-            if random.random() < density:
-                row.append(1)
-            else:
-                row.append(0)
-
-        maze.append(row)
-
-    while True:
-
-        start = (
-            random.randint(0, rows - 1),
-            random.randint(0, cols - 1)
-        )
-
-        if maze[start[0]][start[1]] == 0:
-            break
-
-    while True:
-
-        end = (
-            random.randint(0, rows - 1),
-            random.randint(0, cols - 1)
-        )
-
-        if maze[end[0]][end[1]] == 0 and end != start:
-            break
-
-    maze[start[0]][start[1]] = 0
-    maze[end[0]][end[1]] = 0
+    while end == start:
+        end = random_empty_cell(maze)
 
     return maze, start, end
 
 
-# NEIGHBOURS
+def random_empty_cell(maze):
+    """
+    Return a random walkable position.
+    """
 
-def get_neighbors(position):
+    rows = len(maze)
+    cols = len(maze[0])
+
+    while True:
+
+        position = (
+            random.randint(0, rows - 1),
+            random.randint(0, cols - 1),
+        )
+
+        if maze[position[0]][position[1]] == 0:
+            return position
+
+
+def in_bounds(position, maze):
+    """
+    Check whether a position lies inside the maze.
+    """
+
+    row, col = position
+
+    return (
+        0 <= row < len(maze)
+        and
+        0 <= col < len(maze[0])
+    )
+
+
+def is_walkable(position, maze):
+    """
+    Return True if the position is not an obstacle.
+    """
+
+    row, col = position
+
+    return maze[row][col] == 0
+
+
+def get_neighbors(position, maze):
+    """
+    Return all valid neighbouring cells.
+    """
+
+    row, col = position
+
+    directions = [
+        (-1, 0),
+        (1, 0),
+        (0, -1),
+        (0, 1),
+    ]
 
     if ALLOW_DIAGONALS:
 
-        directions = [
-            (-1, 0),
-            (1, 0),
-            (0, -1),
-            (0, 1),
-
+        directions.extend([
             (-1, -1),
             (-1, 1),
             (1, -1),
-            (1, 1)
-        ]
+            (1, 1),
+        ])
 
-    else:
+    neighbours = []
 
-        directions = [
-            (-1, 0),
-            (1, 0),
-            (0, -1),
-            (0, 1)
-        ]
+    for dr, dc in directions:
 
-    return directions
+        neighbour = (
+            row + dr,
+            col + dc,
+        )
+
+        if not in_bounds(neighbour, maze):
+            continue
+
+        if not is_walkable(neighbour, maze):
+            continue
+
+        neighbours.append(neighbour)
+
+    return neighbours
+
+
+def movement_cost(current, neighbour):
+    """
+    Cost of moving from one cell to another.
+    """
+
+    row_diff = abs(current[0] - neighbour[0])
+    col_diff = abs(current[1] - neighbour[1])
+
+    if row_diff == 1 and col_diff == 1:
+        return 1.41421356237
+
+    return 1.0

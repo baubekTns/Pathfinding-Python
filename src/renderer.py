@@ -1,129 +1,171 @@
-from constants import *
+"""
+Pygame renderer for the pathfinding visualizer.
+"""
+
+from __future__ import annotations
+
 import pygame
 
-# ==============================
-# DRAWING
-# ==============================
+from src.constants import (
+    ROWS,
+    COLS,
+    CELL_SIZE,
+    WINDOW_WIDTH,
+    WINDOW_HEIGHT,
+    WHITE,
+    BLACK,
+    GRID,
+    START,
+    END,
+    OPEN,
+    CLOSED,
+    PATH,
+    CURRENT,
+)
 
-def draw(
-    screen,
-    maze,
-    start,
-    end,
-    open_set,
-    closed_set,
-    path,
-    stats=None
-):
 
-    screen.fill(WHITE)
+class Renderer:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = pygame.font.SysFont("Arial", 18)
 
-    # Maze
-    for r in range(ROWS):
+    def draw(self, maze, algorithm):
+        """
+        Draw the current visualization state.
+        """
 
-        for c in range(COLS):
+        self.screen.fill(WHITE)
 
-            rect = pygame.Rect(
-                c * CELL_SIZE,
-                r * CELL_SIZE,
-                CELL_SIZE,
-                CELL_SIZE
+        self.draw_maze(maze)
+        self.draw_algorithm_state(algorithm)
+        self.draw_grid()
+
+        pygame.display.flip()
+
+    def draw_maze(self, maze):
+        """
+        Draw obstacles and empty cells.
+        """
+
+        for row in range(ROWS):
+            for col in range(COLS):
+
+                rect = pygame.Rect(
+                    col * CELL_SIZE,
+                    row * CELL_SIZE,
+                    CELL_SIZE,
+                    CELL_SIZE
+                )
+
+                color = WHITE
+
+                if maze[row][col] == 1:
+                    color = BLACK
+
+                pygame.draw.rect(self.screen, color, rect)
+
+    def draw_algorithm_state(self, algorithm):
+        """
+        Draw open set, closed set, path, current node, start, end.
+        """
+
+        # Closed set
+        for row, col in algorithm.closed_set:
+            pygame.draw.rect(
+                self.screen,
+                CLOSED,
+                (
+                    col * CELL_SIZE,
+                    row * CELL_SIZE,
+                    CELL_SIZE,
+                    CELL_SIZE,
+                ),
             )
 
-            color = WHITE
+        # Open set
+        for row, col in algorithm.open_set:
+            pygame.draw.rect(
+                self.screen,
+                OPEN,
+                (
+                    col * CELL_SIZE,
+                    row * CELL_SIZE,
+                    CELL_SIZE,
+                    CELL_SIZE,
+                ),
+            )
 
-            if maze[r][c] == 1:
-                color = BLACK
+        # Path
+        for row, col in algorithm.path:
+            pygame.draw.rect(
+                self.screen,
+                PATH,
+                (
+                    col * CELL_SIZE,
+                    row * CELL_SIZE,
+                    CELL_SIZE,
+                    CELL_SIZE,
+                ),
+            )
 
-            pygame.draw.rect(screen, color, rect)
+        # Current node
+        if algorithm.current:
+            row, col = algorithm.current
 
-    # Closed set
-    for position in closed_set:
+            pygame.draw.rect(
+                self.screen,
+                CURRENT,
+                (
+                    col * CELL_SIZE,
+                    row * CELL_SIZE,
+                    CELL_SIZE,
+                    CELL_SIZE,
+                ),
+            )
 
-        r, c = position
-
+        # Start
+        row, col = algorithm.start
         pygame.draw.rect(
-            screen,
-            CLOSED,
+            self.screen,
+            START,
             (
-                c * CELL_SIZE,
-                r * CELL_SIZE,
+                col * CELL_SIZE,
+                row * CELL_SIZE,
                 CELL_SIZE,
-                CELL_SIZE
-            )
+                CELL_SIZE,
+            ),
         )
 
-    # Open set
-    for position in open_set:
-
-        r, c = position
-
+        # End
+        row, col = algorithm.end
         pygame.draw.rect(
-            screen,
-            OPEN,
+            self.screen,
+            END,
             (
-                c * CELL_SIZE,
-                r * CELL_SIZE,
+                col * CELL_SIZE,
+                row * CELL_SIZE,
                 CELL_SIZE,
-                CELL_SIZE
-            )
-        )
-
-    # Final path
-    for r, c in path:
-
-        pygame.draw.rect(
-            screen,
-            PATH,
-            (
-                c * CELL_SIZE,
-                r * CELL_SIZE,
                 CELL_SIZE,
-                CELL_SIZE
+            ),
+        )
+
+    def draw_grid(self):
+        """
+        Draw grid lines.
+        """
+
+        for row in range(ROWS + 1):
+            pygame.draw.line(
+                self.screen,
+                GRID,
+                (0, row * CELL_SIZE),
+                (WINDOW_WIDTH, row * CELL_SIZE),
             )
-        )
 
-    # Start
-    pygame.draw.rect(
-        screen,
-        START,
-        (
-            start[1] * CELL_SIZE,
-            start[0] * CELL_SIZE,
-            CELL_SIZE,
-            CELL_SIZE
-        )
-    )
-
-    # End
-    pygame.draw.rect(
-        screen,
-        END,
-        (
-            end[1] * CELL_SIZE,
-            end[0] * CELL_SIZE,
-            CELL_SIZE,
-            CELL_SIZE
-        )
-    )
-
-    # Grid
-    for r in range(ROWS + 1):
-
-        pygame.draw.line(
-            screen,
-            GRID,
-            (0, r * CELL_SIZE),
-            (WINDOW_WIDTH, r * CELL_SIZE)
-        )
-
-    for c in range(COLS + 1):
-
-        pygame.draw.line(
-            screen,
-            GRID,
-            (c * CELL_SIZE, 0),
-            (c * CELL_SIZE, WINDOW_HEIGHT)
-        )
-
-    pygame.display.flip()
+        for col in range(COLS + 1):
+            pygame.draw.line(
+                self.screen,
+                GRID,
+                (col * CELL_SIZE, 0),
+                (col * CELL_SIZE, WINDOW_HEIGHT),
+            )
