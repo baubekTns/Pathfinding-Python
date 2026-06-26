@@ -1,19 +1,31 @@
-# A\* Pathfinding Visualizer
+# Pathfinding Algorithm Visualizer
 
-A Python application that visualizes the **A\* (A-Star) pathfinding algorithm** on a randomly generated grid. The program animates the search process, showing how the algorithm explores the grid before highlighting the shortest path between the start and end nodes.
+A Python application that visualizes and compares multiple pathfinding algorithms on a randomly generated grid. The program animates the search process, showing how each algorithm explores the grid before highlighting the path between the start and end nodes.
 
 ## Features
 
 - Random maze generation with configurable obstacle density
 - Randomly generated start and end positions
-- A\* pathfinding algorithm with diagonal movement support
+- Multiple pathfinding algorithms:
+  - A\* Search
+  - Breadth-First Search (BFS)
+  - Depth-First Search (DFS)
+  - Dijkstra's Algorithm
+  - Greedy Best-First Search
+
+- Diagonal movement support
 - Animated visualization of the search process
 - Displays open and closed node sets during execution
-- Highlights the final shortest path
-- Prints search statistics including:
+- Highlights the final discovered path
+- Keyboard controls for switching between algorithms
+- On-screen HUD showing:
+  - Active algorithm
+  - Search status
   - Runtime
   - Nodes explored
+  - Open and closed node counts
   - Path length
+  - Path cost where applicable
 
 ## Technologies
 
@@ -86,16 +98,17 @@ python main.py
 
 ## Controls
 
-| Key       | Action                          |
-| --------- | ------------------------------- |
-| **1**     | select A\*                      |
-| **2**     | select BFS                      |
-| **3**     | select Dijkstra                 |
-| **4**     | select Greedy Best-First Search |
-| **5**     | select DFS                      |
-| **Space** | pauses/resumes                  |
-| **R**     | Generate a new random maze      |
-| **Esc**   | Exit the application            |
+| Key       | Action                                |
+| --------- | ------------------------------------- |
+| **1**     | select A\*                            |
+| **2**     | select BFS                            |
+| **3**     | select Dijkstra                       |
+| **4**     | select Greedy Best-First Search       |
+| **5**     | select DFS                            |
+| **Enter** | rerun selected algorithm on same maze |
+| **Space** | pauses/resumes                        |
+| **R**     | Generate a new random maze            |
+| **Esc**   | Exit the application                  |
 
 ## Future Improvements
 

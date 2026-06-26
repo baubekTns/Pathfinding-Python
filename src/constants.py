@@ -11,16 +11,23 @@ ROWS = 20
 COLS = 20
 CELL_SIZE = 30
 
-WINDOW_WIDTH = COLS * CELL_SIZE
-WINDOW_HEIGHT = ROWS * CELL_SIZE
+GRID_WIDTH = COLS * CELL_SIZE
+GRID_HEIGHT = ROWS * CELL_SIZE
+
+HUD_WIDTH = 280
+
+WINDOW_WIDTH = GRID_WIDTH + HUD_WIDTH
+WINDOW_HEIGHT = GRID_HEIGHT
 
 # =========================
 # Visualisation
 # =========================
 
 FPS = 60
-SEARCH_DELAY = 25          # milliseconds
+SEARCH_DELAY = 25
 ALLOW_DIAGONALS = True
+
+SHOW_HUD = True
 
 # =========================
 # Maze
@@ -48,6 +55,9 @@ PATH = (160, 50, 255)
 CURRENT = (255, 140, 0)
 
 TEXT = (40, 40, 40)
+
+HUD_BACKGROUND = (255, 255, 255)
+HUD_BORDER = (180, 180, 180)
 
 BACKGROUND = WHITE
 
